@@ -18,9 +18,9 @@ class PersonalProfile extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
               border:
                   Border.all(color: Color.fromRGBO(23, 42, 135, 1), width: 2),
-              image: DecorationImage(
-                  image: AssetImage("assets/images/circleImage.jpg"),
-                  fit: BoxFit.cover),
+              // image: DecorationImage(
+                  // image: AssetImage("assets/images/sundus.jpg"),
+                  // fit: BoxFit.cover),
             ),
             child: null),
         Text("Welcome again Abdifitah",
@@ -37,26 +37,31 @@ class PersonalProfile extends StatelessWidget {
 class AddCard extends StatelessWidget {
   @override
   Widget build(Object context) {
-    return Container(
-      width: 311,
-      height: 63,
-      decoration: BoxDecoration(
-          color: Color.fromRGBO(23, 42, 135, 1),
-          borderRadius: BorderRadius.circular(30)),
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 43,
-        ),
-        Text(
-          "Add Cards",
-          style: TextStyle(color: Colors.white, fontSize: 30),
-        )
-      ]),
+
+    return GestureDetector(
+      onTap: null,
+      child: Container(
+        width: 311,
+        height: 63,
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(23, 42, 135, 1),
+            borderRadius: BorderRadius.circular(30)),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 43,
+          ),
+          Text(
+            "Add Cards",
+            style: TextStyle(color: Colors.white, fontSize: 30),
+          )
+        ]),
+      ),
     );
   }
 }
+// am here
 
 // returning the mapped the of every rectangle design
 class GetMappedCards extends StatelessWidget {
