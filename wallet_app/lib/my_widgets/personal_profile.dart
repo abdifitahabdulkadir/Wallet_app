@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_app/my_widgets/page2.dart';
 
 // my custom imports of flies
 import '../Modal/home_modal.dart';
@@ -36,10 +37,14 @@ class PersonalProfile extends StatelessWidget {
 // for cards design
 class AddCard extends StatelessWidget {
   @override
-  Widget build(Object context) {
+  Widget build(BuildContext context) {
 
-    return GestureDetector(
-      onTap: null,
+    return InkWell(
+      onTap: (){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return page2();
+    }));
+      },
       child: Container(
         width: 311,
         height: 63,

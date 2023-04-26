@@ -9,4 +9,5 @@ final getIcons = [
   DisplayRecentCards(getIcon: Icon(Icons.credit_card)),
   DisplayRecentCards(getIcon: Icon(Icons.electrical_services)),
   DisplayRecentCards(getIcon: Icon(Icons.work)),
+  DisplayRecentCards(getIcon: Icon(Icons.search)),
 ];
