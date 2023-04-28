@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_app/my_widgets/page2.dart';
 
 // my custom imports of flies
 import '../Modal/home_modal.dart';
 import '../my_widgets/display_recent_cards.dart';
+import '../Screens/import_card.dart';
 
 // perofile pricture
 class PersonalProfile extends StatelessWidget {
@@ -19,9 +19,9 @@ class PersonalProfile extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
               border:
                   Border.all(color: Color.fromRGBO(23, 42, 135, 1), width: 2),
-              // image: DecorationImage(
-                  // image: AssetImage("assets/images/sundus.jpg"),
-                  // fit: BoxFit.cover),
+              image: DecorationImage(
+                  image: AssetImage("assets/images/sundus.jpg"),
+                  fit: BoxFit.cover),
             ),
             child: null),
         Text("Welcome again Abdifitah",
@@ -36,15 +36,14 @@ class PersonalProfile extends StatelessWidget {
 
 // for cards design
 class AddCard extends StatelessWidget {
+
+  _goImportCard(BuildContext context) {
+    return Navigator.of(context).pushNamed(ImportCard.routeName);
+  }
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
-      onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return page2();
-    }));
-      },
+      onTap: () => _goImportCard(context),
       child: Container(
         width: 311,
         height: 63,
@@ -72,16 +71,29 @@ class AddCard extends StatelessWidget {
 class GetMappedCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView.count(
-        childAspectRatio: 4 / 2,
-        crossAxisCount: 2,
+    return SafeArea(
+      child: Column(
         children: [
-          ...getIcons.map((eachIcon) {
-            return DisplayRecentCards(
-              getIcon: eachIcon.getIcon,
-            );
-          })
+          PersonalProfile(),
+          SizedBox(height: 60),
+          AddCard(),
+          SizedBox(height: 30),
+          Text("Recently Added Cards",
+              style: TextStyle(
+                  color: Color.fromRGBO(23, 42, 135, 1), fontSize: 30)),
+          Expanded(
+            child: GridView.count(
+              childAspectRatio: 4 / 2,
+              crossAxisCount: 2,
+              children: [
+                ...getIcons.map((eachIcon) {
+                  return DisplayRecentCards(
+                    getIcon: eachIcon.getIcon,
+                  );
+                })
+              ],
+            ),
+          ),
         ],
       ),
     );
