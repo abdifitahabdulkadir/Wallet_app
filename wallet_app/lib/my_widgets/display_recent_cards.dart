@@ -15,7 +15,10 @@ class DisplayRecentCards extends StatelessWidget {
             color: Color.fromRGBO(217, 217, 217, 1),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(getIcon.icon),
+          child: Icon(
+            getIcon.icon,
+            color: Theme.of(context).primaryColor,
+          ),
         )
       ],
     );
