@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // my custom imports
 import './Screens/home_screen.dart';
 import './Screens/import_card.dart';
+import './Screens/image_from_web.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,16 +12,15 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
-
-  @override
+@override
   Widget build(BuildContext context) {
     return MaterialApp(
 
       initialRoute: "/",
       routes: {
         "/": (context) => Home(),
-        ImportCard.routeName: (context) => ImportCard()
+        ImportCard.routeName: (context) => ImportCard(),
+        ImageFromWeb.routeName: (context) => ImageFromWeb()
       },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -28,11 +28,12 @@ class MyApp extends StatelessWidget {
           primaryColor: Color.fromRGBO(23, 42, 135, 1),
           textTheme: TextTheme(
               bodyLarge: TextStyle(
-            color: Colors.white,
+              color: Colors.blue,
             fontFamily: "Roboto",
-            fontSize: 30,
-            fontWeight: FontWeight.normal,
-          ))
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          )
       
       ),
       // home: Home(),

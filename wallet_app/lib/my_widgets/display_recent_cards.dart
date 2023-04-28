@@ -17,6 +17,7 @@ class DisplayRecentCards extends StatelessWidget {
           ),
           child: Icon(
             getIcon.icon,
+            size: 50,
             color: Theme.of(context).primaryColor,
           ),
         )

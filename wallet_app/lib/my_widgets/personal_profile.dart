@@ -77,10 +77,11 @@ class GetMappedCards extends StatelessWidget {
           PersonalProfile(),
           SizedBox(height: 60),
           AddCard(),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           Text("Recently Added Cards",
               style: TextStyle(
                   color: Color.fromRGBO(23, 42, 135, 1), fontSize: 30)),
+          SizedBox(height: 10),
           Expanded(
             child: GridView.count(
               childAspectRatio: 4 / 2,
