@@ -1,45 +1,65 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wallet_app/Screens/import_card.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // my custom imports
 import './Screens/home_screen.dart';
-import './Screens/import_card.dart';
-import './Screens/image_from_web.dart';
+import './Screens/added_cards.dart';
+import 'my_widgets/setting.dart';
+import './Screens/register.dart';
+import './Screens/account_manage.dart';
+import '../wallet_providers/authentication_provider.dart';
 
-void main() {
-  runApp(const MyApp());
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
-
-@override
-  Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
+      home: StreamBuilder(
+        stream: ref.watch(firebaseAuthProvider).authStateChanges(),
+        builder: (_, snapshoots) {
+          if (snapshoots.connectionState == ConnectionState.waiting)
+            return CircularProgressIndicator();
 
-      initialRoute: "/",
+          if (snapshoots.hasData) return Home();
+          return Register();
+        },
+      ),
       routes: {
-        "/": (context) => Home(),
+       
+        AddedCards.routeName: (context) => AddedCards(),
+        Setting.routeName: (context) => Setting(),
+        Register.routeName: (context) => Register(),
         ImportCard.routeName: (context) => ImportCard(),
-        ImageFromWeb.routeName: (context) => ImageFromWeb()
+        AccountManage.routeName: (context) => AccountManage(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
           primaryColor: Color.fromRGBO(23, 42, 135, 1),
           textTheme: TextTheme(
-              bodyLarge: TextStyle(
+            bodyLarge: TextStyle(
               color: Colors.blue,
-            fontFamily: "Roboto",
+              fontFamily: "Roboto",
               fontSize: 25,
               fontWeight: FontWeight.bold,
             ),
-          )
-      
-      ),
+          )),
       // home: Home(),
     );
   }
 }
-
-// returning the home bottom design to use again and again
-
