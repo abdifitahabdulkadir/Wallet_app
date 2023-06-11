@@ -1,102 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // my custom imports of flies
-import '../Modal/home_modal.dart';
+import '../Screens/added_cards.dart';
 import '../my_widgets/display_recent_cards.dart';
-import '../Screens/import_card.dart';
-
-// perofile pricture
-class PersonalProfile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-            margin: EdgeInsets.all(10),
-            height: 80,
-            width: 80,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              border:
-                  Border.all(color: Color.fromRGBO(23, 42, 135, 1), width: 2),
-              image: DecorationImage(
-                  image: AssetImage("assets/images/sundus.jpg"),
-                  fit: BoxFit.cover),
-            ),
-            child: null),
-        Text("Welcome again Abdifitah",
-            style: TextStyle(
-              color: Color.fromRGBO(23, 42, 135, 1),
-              fontSize: 20,
-            )) // Foreground widget here))
-      ],
-    );
-  }
-}
-
-// for cards design
-class AddCard extends StatelessWidget {
-
-  _goImportCard(BuildContext context) {
-    return Navigator.of(context).pushNamed(ImportCard.routeName);
-  }
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => _goImportCard(context),
-      child: Container(
-        width: 311,
-        height: 63,
-        decoration: BoxDecoration(
-            color: Color.fromRGBO(23, 42, 135, 1),
-            borderRadius: BorderRadius.circular(30)),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 43,
-          ),
-          Text(
-            "Add Cards",
-            style: TextStyle(color: Colors.white, fontSize: 30),
-          )
-        ]),
-      ),
-    );
-  }
-}
-// am here
+import './side_bar_drawer.dart';
+import '../wallet_providers/authentication_provider.dart';
 
 // returning the mapped the of every rectangle design
-class GetMappedCards extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          PersonalProfile(),
-          SizedBox(height: 60),
-          AddCard(),
-          SizedBox(height: 10),
-          Text("Recently Added Cards",
-              style: TextStyle(
-                  color: Color.fromRGBO(23, 42, 135, 1), fontSize: 30)),
-          SizedBox(height: 10),
-          Expanded(
-            child: GridView.count(
-              childAspectRatio: 4 / 2,
-              crossAxisCount: 2,
-              children: [
-                ...getIcons.map((eachIcon) {
-                  return DisplayRecentCards(
-                    getIcon: eachIcon.getIcon,
-                  );
-                })
-              ],
-            ),
-          ),
-        ],
-      ),
+class GetMappedCards extends ConsumerWidget {
+  // image builder for showing you dont add any thing to the home
+
+  _buildImage() {
+    return Container(
+      height: 300,
+      width: 400,
+      decoration: BoxDecoration(borderRadius: BorderRadius.zero),
+      child: Image.asset("assets/images/loadingimage.png"),
     );
+  }
+
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 60,
+          backgroundColor: Theme.of(context).primaryColor,
+        ),
+        drawer: SideBarDrawer(),
+        body: SafeArea(
+            child: StreamBuilder(
+          stream: ref
+              .watch(firebaseFirestoreProvider)
+              .collection("addedhomecards")
+              .snapshots(),
+          builder: (_, eachSnapshot) {
+            if (eachSnapshot.connectionState == ConnectionState.waiting)
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+
+            final filteredData = eachSnapshot.data!.docs
+                .where((element) =>
+                    element["userid"] ==
+                    ref.watch(firebaseAuthProvider).currentUser!.uid)
+                .toList();
+            if (filteredData.isEmpty) return _buildImage();
+
+            return GridView.builder(
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                  childAspectRatio: 1,
+                ),
+                itemCount: filteredData.length > 10
+                    ? filteredData.length ~/ 2
+                    : filteredData.length,
+                itemBuilder: (_, index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AddedCards.routeName);
+                      ref.watch(addedCardsFilterProvider.notifier).state =
+                          filteredData[index].data()["category"];
+                    },
+                    child: DisplayRecentCards(
+                        category: filteredData[index].data()["category"],
+                        title: filteredData[index].data()["image_title"]),
+                  );
+                });
+          },
+        )));
   }
 }
